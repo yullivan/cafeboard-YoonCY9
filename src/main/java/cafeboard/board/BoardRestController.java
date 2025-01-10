@@ -3,10 +3,7 @@ package cafeboard.board;
 import cafeboard.board.DTO.BoardResponse;
 import cafeboard.board.DTO.CreateBoard;
 import cafeboard.board.DTO.CreateBoardResponse;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,5 +25,10 @@ public class BoardRestController {
     @GetMapping("/boards")
     public List<BoardResponse> findAll() {
         return boardService.findAll();
+    }
+
+    @DeleteMapping("/boards/{boardId}")
+    public void delete(@PathVariable Long boardId) {
+        boardService.delete(boardId);
     }
 }
