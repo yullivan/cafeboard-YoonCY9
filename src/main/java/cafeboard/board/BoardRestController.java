@@ -1,6 +1,7 @@
 package cafeboard.board;
 
 import cafeboard.board.DTO.BoardResponse;
+import cafeboard.board.DTO.BoardUpdate;
 import cafeboard.board.DTO.CreateBoard;
 import cafeboard.board.DTO.CreateBoardResponse;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,11 @@ public class BoardRestController {
     @GetMapping("/boards")
     public List<BoardResponse> findAll() {
         return boardService.findAll();
+    }
+
+    @PutMapping("/boards/{boardId}")
+    public void update(@PathVariable Long boardId, @RequestBody BoardUpdate board) {
+        boardService.update(boardId,board);
     }
 
     @DeleteMapping("/boards/{boardId}")

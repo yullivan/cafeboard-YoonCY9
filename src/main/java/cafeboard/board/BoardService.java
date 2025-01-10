@@ -1,12 +1,14 @@
 package cafeboard.board;
 
 import cafeboard.board.DTO.BoardResponse;
+import cafeboard.board.DTO.BoardUpdate;
 import cafeboard.board.DTO.CreateBoard;
 import cafeboard.board.DTO.CreateBoardResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class BoardService {
@@ -26,6 +28,12 @@ public class BoardService {
     public List<BoardResponse> findAll() { // 모든 게시판 조회
         List<Board> boards = boardRepository.findAll();
         return boards.stream().map(board -> new BoardResponse(board.getId(), board.getTitle())).toList();
+    }
+
+    @Transactional
+    public void update(Long id, BoardUpdate dto) {
+        Board board = boardRepository.findById(id).orElseThrow(() -> new NoSuchElementException("게시판을 찾을 수 없음"));
+        board.setTitle(dto.title());
     }
 
     @Transactional

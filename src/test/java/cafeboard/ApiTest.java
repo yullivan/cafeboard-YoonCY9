@@ -3,6 +3,7 @@ package cafeboard;
 import cafeboard.board.Board;
 import cafeboard.board.BoardRepository;
 import cafeboard.board.DTO.BoardResponse;
+import cafeboard.board.DTO.BoardUpdate;
 import cafeboard.board.DTO.CreateBoard;
 import cafeboard.board.DTO.CreateBoardResponse;
 import io.restassured.RestAssured;
@@ -41,7 +42,7 @@ public class ApiTest {
 
     @Test
     void 게시판생성테스트() {
-        RestAssured.defaultParser = Parser.JSON;
+
 
         CreateBoardResponse response = RestAssured.given()
                 .contentType(ContentType.JSON) // 요청의 Content-Type 설정
@@ -60,7 +61,7 @@ public class ApiTest {
 
     @Test
     void 게시판응답데이터Test() {
-        RestAssured.defaultParser = Parser.JSON;
+
 
         boardRepository.save(new Board("테스트1"));
         boardRepository.save(new Board("테스트2"));
@@ -81,7 +82,7 @@ public class ApiTest {
 
     @Test
     void 게시판삭제Test() {
-        RestAssured.defaultParser = Parser.JSON;
+
 
         CreateBoardResponse 만들었던게시판 = RestAssured.given()
                 .contentType(ContentType.JSON) // 요청의 Content-Type 설정
@@ -115,19 +116,47 @@ public class ApiTest {
         assertThat(boardResponses).allSatisfy(b -> {
             assertThat(b.id()).isNotEqualTo(만들었던게시판.id());
         });
+    }
 
-        //
-//    @Test
-//    void 특정게시판의게시글목록Test() {
-//        BoardByPosts responses = RestAssured
-//                .given().log().all()
-//                .pathParam("productId",1)
-//                .when()
-//                .get("/boards/{boardId}")
-//                .then().log().all()
-//                .statusCode(200)
-//                .extract()
-//                .as(BoardByPosts.class);
-//    }
+    @Test
+    void 게시판수정Test() {
+
+
+        CreateBoardResponse 만들었던게시판 = RestAssured.given()
+                .contentType(ContentType.JSON) // 요청의 Content-Type 설정
+                .body(new CreateBoard("테스트게시판")) // 요청 본문 설정
+                .log().all() // 요청 로그 출력
+                .when()
+                .post("/boards") // POST 요청 전송
+                .then()
+                .statusCode(200) // HTTP 상태 코드 검증 (201 Created)
+                .extract()
+                .as(CreateBoardResponse.class);
+
+        RestAssured.given()
+                .contentType(ContentType.JSON)
+                .body(new BoardUpdate("수정게시판"))
+                .log().all()
+                .pathParam("boardId",만들었던게시판.id())
+                .when()
+                .put("/boards/{boardId}")
+                .then()
+                .statusCode(200);
+
+        List<BoardResponse> boardResponses = /*게시판 목록 조회 요청*/
+                RestAssured.given()
+                        .when()
+                        .get("/boards")
+                        .then()
+                        .statusCode(200)
+                        .extract()
+                        .jsonPath()
+                        .getList(".", BoardResponse.class);
+
+
+
+        assertThat(만들었던게시판.title()).isEqualTo("수정게시판");
+
+
     }
 }
