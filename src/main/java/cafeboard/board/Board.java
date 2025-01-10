@@ -24,6 +24,9 @@ public class Board {
     @LastModifiedDate
     private LocalDateTime updatedTime;
 
+    public Board() {
+    }
+
     public Board(String title) {
         this.title = title;
     }
