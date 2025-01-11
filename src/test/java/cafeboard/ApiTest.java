@@ -154,9 +154,6 @@ public class ApiTest {
                         .getList(".", BoardResponse.class);
 
 
-
-        assertThat(만들었던게시판.title()).isEqualTo("수정게시판");
-
-
+        assertThat(boardResponses.get(0).title()).isEqualTo("수정게시판");
     }
 }
