@@ -1,5 +1,6 @@
 package cafeboard;
 
+import cafeboard.Post.DTO.CreatePost;
 import cafeboard.board.Board;
 import cafeboard.board.BoardRepository;
 import cafeboard.board.DTO.BoardResponse;
@@ -8,19 +9,15 @@ import cafeboard.board.DTO.CreateBoard;
 import cafeboard.board.DTO.CreateBoardResponse;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import io.restassured.parsing.Parser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-import java.util.HashMap;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.core.IsEqual.equalTo;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ApiTest {
@@ -137,7 +134,7 @@ public class ApiTest {
                 .contentType(ContentType.JSON)
                 .body(new BoardUpdate("수정게시판"))
                 .log().all()
-                .pathParam("boardId",만들었던게시판.id())
+                .pathParam("boardId", 만들었던게시판.id())
                 .when()
                 .put("/boards/{boardId}")
                 .then()
@@ -155,5 +152,28 @@ public class ApiTest {
 
 
         assertThat(boardResponses.get(0).title()).isEqualTo("수정게시판");
+    }
+
+    @Test
+    void 게시글생성Test() {
+
+        Board board = new Board("테스트게시판");
+        boardRepository.save(board);
+
+        CreatePost createPostRequest = new CreatePost(
+                board.getId(),
+                "테스트 게시글",
+                "테스트 내용",
+                "테스트 작성자"
+        );
+
+        RestAssured.given()
+                .contentType(ContentType.JSON)
+                .body(createPostRequest)
+                .when()
+                .post("/posts")
+                .then()
+                .statusCode(200);
+
     }
 }
