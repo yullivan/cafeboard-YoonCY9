@@ -2,10 +2,7 @@ package cafeboard.comment;
 
 import cafeboard.comment.DTO.CommentDetailedResponse;
 import cafeboard.comment.DTO.CreateComment;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class CommentRestController {
@@ -20,4 +17,5 @@ public class CommentRestController {
     public CommentDetailedResponse create(@RequestBody CreateComment comment) {
         return commentService.create(comment);
     }
+
 }

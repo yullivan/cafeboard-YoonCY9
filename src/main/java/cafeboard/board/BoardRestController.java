@@ -4,6 +4,7 @@ import cafeboard.board.DTO.BoardResponse;
 import cafeboard.board.DTO.BoardUpdate;
 import cafeboard.board.DTO.CreateBoard;
 import cafeboard.board.DTO.CreateBoardResponse;
+import cafeboard.post.DTO.PostResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,5 +37,10 @@ public class BoardRestController {
     @DeleteMapping("/boards/{boardId}")
     public void delete(@PathVariable Long boardId) {
         boardService.delete(boardId);
+    }
+
+    @GetMapping("/boards/{boardId}") // 특정 게시판의 게시글 목록 조회
+    public List<PostResponse> findByBoardId(@PathVariable Long boardId) {
+        return boardService.findByBoardId(boardId);
     }
 }

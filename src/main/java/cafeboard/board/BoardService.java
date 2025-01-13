@@ -4,9 +4,13 @@ import cafeboard.board.DTO.BoardResponse;
 import cafeboard.board.DTO.BoardUpdate;
 import cafeboard.board.DTO.CreateBoard;
 import cafeboard.board.DTO.CreateBoardResponse;
+import cafeboard.post.DTO.PostResponse;
+import cafeboard.post.Post;
+import cafeboard.post.PostRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -14,9 +18,11 @@ import java.util.NoSuchElementException;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final PostRepository postRepository;
 
-    public BoardService(BoardRepository boardRepository) {
+    public BoardService(BoardRepository boardRepository, PostRepository postRepository) {
         this.boardRepository = boardRepository;
+        this.postRepository = postRepository;
     }
 
     public CreateBoardResponse create(CreateBoard dto) {  // 게시판 생성
@@ -28,6 +34,16 @@ public class BoardService {
     public List<BoardResponse> findAll() { // 모든 게시판 조회
         List<Board> boards = boardRepository.findAll();
         return boards.stream().map(board -> new BoardResponse(board.getId(), board.getTitle())).toList();
+    }
+
+    public List<PostResponse> findByBoardId(Long boardId) { // 해당 게시판의 게시글 조회
+        Board board = boardRepository.findById(boardId).orElseThrow();
+        List<Post> posts = board.getPosts();
+        return posts.stream().map(p -> new PostResponse(
+                p.getTitle(),
+                p.getContent(),
+                p.getWriter(),
+                p.getId())).toList();
     }
 
     @Transactional

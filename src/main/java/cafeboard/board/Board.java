@@ -1,5 +1,6 @@
 package cafeboard.board;
 
+import cafeboard.post.Post;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -24,11 +25,18 @@ public class Board {
     @LastModifiedDate
     private LocalDateTime updatedTime;
 
+    @OneToMany(mappedBy = "board")
+    private List<Post> posts;
+
     public Board() {
     }
 
     public Board(String title) {
         this.title = title;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
     }
 
     public Long getId() {
