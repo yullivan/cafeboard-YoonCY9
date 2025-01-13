@@ -43,8 +43,8 @@
 - comments 
 
 ### 생성 Post
-- /post/{boardId} (해당 게시판 아이디)
-- Body : title (String) , content(String) , writer(String)
+- /post  
+- Body : boardId (Long), title (String) , content(String) , writer(String)
 
 
 ### 조회 Get
@@ -70,8 +70,8 @@
 - updatedTime
 
 ### 생성 Post
-- /comments/{postId} (해당 게시글 아이디)
-- Body : writer (String), content (String) 
+- /comments(해당 게시글 아이디)
+- Body : PostId(Long), writer (String), content (String) 
 
 ### 수정  Put
 - /comments/{commentId}
