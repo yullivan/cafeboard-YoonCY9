@@ -1,12 +1,14 @@
 package cafeboard.post;
 
 import cafeboard.board.Board;
+import cafeboard.comment.Comment;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @EntityListeners(AuditingEntityListener.class)
 @Entity
@@ -25,6 +27,9 @@ public class Post {
     @ManyToOne
     @JoinColumn(nullable = false)
     private Board board;
+
+    @OneToMany(mappedBy = "post")
+    private List<Comment> comments;
 
     @CreatedDate
     private LocalDateTime createdTime;
@@ -68,6 +73,10 @@ public class Post {
 
     public LocalDateTime getUpdatedTime() {
         return updatedTime;
+    }
+
+    public int commentCount() {
+        return this.comments.size();
     }
 
     public void setPost(String title, String content, String writer) {

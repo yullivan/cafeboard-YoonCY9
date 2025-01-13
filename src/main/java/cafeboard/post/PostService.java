@@ -1,7 +1,7 @@
 package cafeboard.post;
 
 import cafeboard.post.DTO.CreatePost;
-import cafeboard.post.DTO.PostDetailResponse;
+import cafeboard.post.DTO.PostDetailedResponse;
 import cafeboard.post.DTO.PostResponse;
 import cafeboard.post.DTO.PostUpdate;
 import cafeboard.board.Board;
@@ -24,14 +24,14 @@ public class PostService {
         this.boardRepository = boardRepository;
     }
 
-    public PostDetailResponse create(CreatePost dto) {
+    public PostDetailedResponse create(CreatePost dto) {
         Board board = boardRepository
                 .findById(dto.boardId()).orElseThrow
                         (() -> new NoSuchElementException("존재하지 않는 보드 id" + dto.boardId()));
 
         Post post = new Post(dto.title(), dto.content(), dto.writer(), board);
         postRepository.save(post);
-        return new PostDetailResponse(
+        return new PostDetailedResponse(
                 post.getTitle(),
                 post.getContent(),
                 post.getWriter(),
@@ -41,12 +41,14 @@ public class PostService {
 
     public List<PostResponse> findAll() {  // 모든 게시글 조회
         List<Post> posts = postRepository.findAll();
+
         return posts.stream()
                 .map(p -> new PostResponse(
                         p.getTitle(),
                         p.getContent(),
                         p.getWriter(),
-                        p.getId()
+                        p.getId(),
+                        p.commentCount()
                 )).toList();
     }
 

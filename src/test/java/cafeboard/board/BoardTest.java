@@ -4,7 +4,7 @@ import cafeboard.ApiSetting;
 import cafeboard.board.DTO.BoardResponse;
 import cafeboard.board.DTO.BoardUpdate;
 import cafeboard.board.DTO.CreateBoard;
-import cafeboard.board.DTO.CreateBoardResponse;
+import cafeboard.board.DTO.BoardDetailedResponse;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ public class BoardTest extends ApiSetting {
     void 게시판생성테스트() {
 
 
-        CreateBoardResponse response = RestAssured.given()
+        BoardDetailedResponse response = RestAssured.given()
                 .contentType(ContentType.JSON)
                 .body(new CreateBoard("테스트게시판"))
                 .log().all() // 요청 로그 출력
@@ -36,7 +36,7 @@ public class BoardTest extends ApiSetting {
                 .then()
                 .statusCode(200)
                 .extract()
-                .as(CreateBoardResponse.class);
+                .as(BoardDetailedResponse.class);
 
         System.out.println(response.id());
     }
@@ -66,7 +66,7 @@ public class BoardTest extends ApiSetting {
     void 게시판삭제Test() {
 
 
-        CreateBoardResponse 만들었던게시판 = RestAssured.given()
+        BoardDetailedResponse 만들었던게시판 = RestAssured.given()
                 .contentType(ContentType.JSON) // 요청의 Content-Type 설정
                 .body(new CreateBoard("테스트게시판")) // 요청 본문 설정
                 .log().all() // 요청 로그 출력
@@ -75,7 +75,7 @@ public class BoardTest extends ApiSetting {
                 .then()
                 .statusCode(200) // HTTP 상태 코드 검증 (201 Created)
                 .extract()
-                .as(CreateBoardResponse.class);
+                .as(BoardDetailedResponse.class);
 
         RestAssured.
                 given()
@@ -103,7 +103,7 @@ public class BoardTest extends ApiSetting {
     @Test
     void 게시판수정Test() {
 
-        CreateBoardResponse 만들었던게시판 = RestAssured.given()
+        BoardDetailedResponse 만들었던게시판 = RestAssured.given()
                 .contentType(ContentType.JSON) // 요청의 Content-Type 설정
                 .body(new CreateBoard("테스트게시판")) // 요청 본문 설정
                 .log().all() // 요청 로그 출력
@@ -112,7 +112,7 @@ public class BoardTest extends ApiSetting {
                 .then()
                 .statusCode(200) // HTTP 상태 코드 검증 (201 Created)
                 .extract()
-                .as(CreateBoardResponse.class);
+                .as(BoardDetailedResponse.class);
 
         RestAssured.given()
                 .contentType(ContentType.JSON)

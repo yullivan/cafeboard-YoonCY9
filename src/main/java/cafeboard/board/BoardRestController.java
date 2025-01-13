@@ -3,7 +3,7 @@ package cafeboard.board;
 import cafeboard.board.DTO.BoardResponse;
 import cafeboard.board.DTO.BoardUpdate;
 import cafeboard.board.DTO.CreateBoard;
-import cafeboard.board.DTO.CreateBoardResponse;
+import cafeboard.board.DTO.BoardDetailedResponse;
 import cafeboard.post.DTO.PostResponse;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +20,7 @@ public class BoardRestController {
 
 
     @PostMapping("/boards")
-    public CreateBoardResponse create(@RequestBody CreateBoard board) {
+    public BoardDetailedResponse create(@RequestBody CreateBoard board) {
         return boardService.create(board);
     }
 

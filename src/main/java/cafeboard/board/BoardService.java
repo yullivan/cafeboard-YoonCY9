@@ -3,14 +3,13 @@ package cafeboard.board;
 import cafeboard.board.DTO.BoardResponse;
 import cafeboard.board.DTO.BoardUpdate;
 import cafeboard.board.DTO.CreateBoard;
-import cafeboard.board.DTO.CreateBoardResponse;
+import cafeboard.board.DTO.BoardDetailedResponse;
 import cafeboard.post.DTO.PostResponse;
 import cafeboard.post.Post;
 import cafeboard.post.PostRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -25,10 +24,10 @@ public class BoardService {
         this.postRepository = postRepository;
     }
 
-    public CreateBoardResponse create(CreateBoard dto) {  // 게시판 생성
+    public BoardDetailedResponse create(CreateBoard dto) {  // 게시판 생성
         Board board = new Board(dto.title());
         boardRepository.save(board);
-        return new CreateBoardResponse(board.getId(), board.getTitle(), board.getCreatedTime());
+        return new BoardDetailedResponse(board.getId(), board.getTitle(), board.getCreatedTime());
     }
 
     public List<BoardResponse> findAll() { // 모든 게시판 조회
@@ -43,7 +42,9 @@ public class BoardService {
                 p.getTitle(),
                 p.getContent(),
                 p.getWriter(),
-                p.getId())).toList();
+                p.getId(),
+                p.commentCount()
+        )).toList();
     }
 
     @Transactional

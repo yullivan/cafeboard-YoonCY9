@@ -1,8 +1,10 @@
 package cafeboard.post;
 
 import cafeboard.ApiSetting;
+import cafeboard.comment.DTO.CommentDetailedResponse;
+import cafeboard.comment.DTO.CreateComment;
 import cafeboard.post.DTO.CreatePost;
-import cafeboard.post.DTO.PostDetailResponse;
+import cafeboard.post.DTO.PostDetailedResponse;
 import cafeboard.post.DTO.PostResponse;
 import cafeboard.post.DTO.PostUpdate;
 import cafeboard.board.Board;
@@ -39,7 +41,7 @@ public class PostApiTest extends ApiSetting {
                 "테스트 작성자"
         );
 
-        PostDetailResponse response = RestAssured.given()
+        PostDetailedResponse response = RestAssured.given()
                 .contentType(ContentType.JSON)
                 .body(createPostRequest)
                 .when()
@@ -47,7 +49,7 @@ public class PostApiTest extends ApiSetting {
                 .then()
                 .statusCode(200)
                 .extract()
-                .as(PostDetailResponse.class);
+                .as(PostDetailedResponse.class);
 
         assertThat(response.content()).isEqualTo("테스트 내용");
     }
@@ -65,7 +67,7 @@ public class PostApiTest extends ApiSetting {
                 "테스트 작성자"
         );
 
-        PostDetailResponse response = RestAssured.given()
+        PostDetailedResponse response = RestAssured.given()
                 .contentType(ContentType.JSON)
                 .body(createPostRequest)
                 .when()
@@ -73,7 +75,7 @@ public class PostApiTest extends ApiSetting {
                 .then()
                 .statusCode(200)
                 .extract()
-                .as(PostDetailResponse.class);
+                .as(PostDetailedResponse.class);
 
         RestAssured.given()
                 .pathParam("postId",response.id())
@@ -96,7 +98,7 @@ public class PostApiTest extends ApiSetting {
                 "테스트 작성자"
         );
 
-        PostDetailResponse response = RestAssured.given()
+        PostDetailedResponse response = RestAssured.given()
                 .contentType(ContentType.JSON)
                 .body(createPostRequest)
                 .when()
@@ -104,7 +106,7 @@ public class PostApiTest extends ApiSetting {
                 .then()
                 .statusCode(200)
                 .extract()
-                .as(PostDetailResponse.class);
+                .as(PostDetailedResponse.class);
 
         List<PostResponse> responses = RestAssured.given()
                 .when()
@@ -116,6 +118,29 @@ public class PostApiTest extends ApiSetting {
                 .getList(".", PostResponse.class);
 
         assertThat(responses.get(0).title()).isEqualTo("테스트 게시글");
+        assertThat(responses.get(0).commentCount()).isEqualTo(0);
+
+        CommentDetailedResponse comment = RestAssured
+                .given()
+                .contentType(ContentType.JSON)
+                .body(new CreateComment(responses.get(0).id(), "테스트댓글작성자", "테스트댓글내용"))
+                .when()
+                .post("/comments")
+                .then()
+                .statusCode(200)
+                .extract()
+                .as(CommentDetailedResponse.class);
+
+        List<PostResponse> responses2 = RestAssured.given()
+                .when()
+                .get("/posts")
+                .then()
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .getList(".", PostResponse.class);
+
+        assertThat(responses2.get(0).commentCount()).isEqualTo(1);
     }
 
     @Test
@@ -130,7 +155,7 @@ public class PostApiTest extends ApiSetting {
                 "테스트 작성자"
         );
 
-        PostDetailResponse response = RestAssured.given()
+        PostDetailedResponse response = RestAssured.given()
                 .contentType(ContentType.JSON)
                 .body(createPostRequest)
                 .when()
@@ -138,7 +163,7 @@ public class PostApiTest extends ApiSetting {
                 .then()
                 .statusCode(200)
                 .extract()
-                .as(PostDetailResponse.class);
+                .as(PostDetailedResponse.class);
 
         RestAssured.given()
                 .contentType(ContentType.JSON)

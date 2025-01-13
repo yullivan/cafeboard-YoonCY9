@@ -2,7 +2,7 @@ package cafeboard.post;
 
 
 import cafeboard.post.DTO.CreatePost;
-import cafeboard.post.DTO.PostDetailResponse;
+import cafeboard.post.DTO.PostDetailedResponse;
 import cafeboard.post.DTO.PostResponse;
 import cafeboard.post.DTO.PostUpdate;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +19,7 @@ public class PostRestController {
     }
 
     @PostMapping("/posts")
-    public PostDetailResponse create(@RequestBody CreatePost post) {
+    public PostDetailedResponse create(@RequestBody CreatePost post) {
         return postService.create(post);
     }
 
