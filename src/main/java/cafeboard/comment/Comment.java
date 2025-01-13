@@ -64,7 +64,11 @@ public class Comment {
     }
 
     public void setComment(String writer, String content) {
-        this.writer = writer;
-        this.content = content;
+        if (writer != null) {
+            this.writer = writer;
+        }
+        if (content != null) {
+            this.content = content;
+        }
     }
 }

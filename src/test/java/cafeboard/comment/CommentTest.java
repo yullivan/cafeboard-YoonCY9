@@ -4,6 +4,7 @@ import cafeboard.ApiSetting;
 import cafeboard.board.DTO.CreateBoard;
 import cafeboard.board.DTO.BoardDetailedResponse;
 import cafeboard.comment.DTO.CommentDetailedResponse;
+import cafeboard.comment.DTO.CommentUpdate;
 import cafeboard.comment.DTO.CreateComment;
 import cafeboard.post.DTO.CreatePost;
 import cafeboard.post.DTO.PostDetailedResponse;
@@ -33,7 +34,7 @@ public class CommentTest extends ApiSetting {
 
         PostDetailedResponse post = RestAssured.given()
                 .contentType(ContentType.JSON)
-                .body(new CreatePost(board.id(), "테스트제목","테스트내용","테스트이름"))
+                .body(new CreatePost(board.id(), "테스트제목", "테스트내용", "테스트이름"))
                 .when()
                 .post("/posts")
                 .then()
@@ -71,7 +72,7 @@ public class CommentTest extends ApiSetting {
 
         PostDetailedResponse post = RestAssured.given()
                 .contentType(ContentType.JSON)
-                .body(new CreatePost(board.id(), "테스트제목","테스트내용","테스트이름"))
+                .body(new CreatePost(board.id(), "테스트제목", "테스트내용", "테스트이름"))
                 .when()
                 .post("/posts")
                 .then()
@@ -91,7 +92,7 @@ public class CommentTest extends ApiSetting {
                 .as(CommentDetailedResponse.class);
 
         RestAssured.given()
-                .pathParam("commentId",comment.id())
+                .pathParam("commentId", comment.id())
                 .when()
                 .delete("/comments/{commentId}")
                 .then()
@@ -107,7 +108,48 @@ public class CommentTest extends ApiSetting {
                 .getList(".", PostResponse.class);
 
         assertThat(responses2.get(0).commentCount()).isEqualTo(0);
+    }
 
+    @Test
+    void 댓글수정Test() {
+        BoardDetailedResponse board = RestAssured.given()
+                .contentType(ContentType.JSON)
+                .body(new CreateBoard("테스트게시판"))
+                .log().all() // 요청 로그 출력
+                .when()
+                .post("/boards") // POST 요청 전송
+                .then()
+                .statusCode(200)
+                .extract()
+                .as(BoardDetailedResponse.class);
 
+        PostDetailedResponse post = RestAssured.given()
+                .contentType(ContentType.JSON)
+                .body(new CreatePost(board.id(), "테스트제목", "테스트내용", "테스트이름"))
+                .when()
+                .post("/posts")
+                .then()
+                .statusCode(200)
+                .extract()
+                .as(PostDetailedResponse.class);
+
+        CommentDetailedResponse comment = RestAssured
+                .given()
+                .contentType(ContentType.JSON)
+                .body(new CreateComment(post.id(), "테스트댓글작성자", "테스트댓글내용"))
+                .when()
+                .post("/comments")
+                .then()
+                .statusCode(200)
+                .extract()
+                .as(CommentDetailedResponse.class);
+
+        RestAssured.given().contentType(ContentType.JSON)
+                .pathParam("commentId", comment.id())
+                .body(new CommentUpdate("수정한작성자", "수정한내용"))
+                .when()
+                .put("/comments/{commentId}")
+                .then()
+                .statusCode(200);
     }
 }

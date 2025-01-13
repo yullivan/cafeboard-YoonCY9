@@ -1,6 +1,7 @@
 package cafeboard.comment;
 
 import cafeboard.comment.DTO.CommentDetailedResponse;
+import cafeboard.comment.DTO.CommentUpdate;
 import cafeboard.comment.DTO.CreateComment;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,11 @@ public class CommentRestController {
     @PostMapping("/comments")
     public CommentDetailedResponse create(@RequestBody CreateComment comment) {
         return commentService.create(comment);
+    }
+
+    @PutMapping("/comments/{commentId}")
+    public void update(@PathVariable Long commentId, @RequestBody CommentUpdate comment) {
+        commentService.update(commentId,comment);
     }
 
     @DeleteMapping("/comments/{commentId}")

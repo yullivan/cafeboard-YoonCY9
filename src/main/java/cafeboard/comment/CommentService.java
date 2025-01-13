@@ -1,6 +1,7 @@
 package cafeboard.comment;
 
 import cafeboard.comment.DTO.CommentDetailedResponse;
+import cafeboard.comment.DTO.CommentUpdate;
 import cafeboard.comment.DTO.CreateComment;
 import cafeboard.post.Post;
 import cafeboard.post.PostRepository;
@@ -31,6 +32,13 @@ public class CommentService {
                 comment.getWriter(),
                 comment.getContent(),
                 comment.getCreatedTime());
+    }
+
+    @Transactional
+    public void update(Long commentId, CommentUpdate dto) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(
+                () -> new NoSuchElementException("존재하지 않는 댓글 id" + commentId));
+        comment.setComment(dto.writer(), dto.content());
     }
 
     @Transactional
