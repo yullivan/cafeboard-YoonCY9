@@ -4,6 +4,7 @@ import cafeboard.comment.DTO.CommentDetailedResponse;
 import cafeboard.comment.DTO.CreateComment;
 import cafeboard.post.Post;
 import cafeboard.post.PostRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
@@ -30,6 +31,11 @@ public class CommentService {
                 comment.getWriter(),
                 comment.getContent(),
                 comment.getCreatedTime());
+    }
+
+    @Transactional
+    public void delete(Long commentId) {
+        commentRepository.deleteById(commentId);
     }
 
 }
