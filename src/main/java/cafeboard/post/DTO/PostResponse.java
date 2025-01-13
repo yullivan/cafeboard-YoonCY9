@@ -1,4 +1,4 @@
-package cafeboard.Post.DTO;
+package cafeboard.post.DTO;
 
 public record PostResponse(String title,
                            String content,

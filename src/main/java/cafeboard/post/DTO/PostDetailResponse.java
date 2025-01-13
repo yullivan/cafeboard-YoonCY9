@@ -1,6 +1,5 @@
-package cafeboard.Post.DTO;
+package cafeboard.post.DTO;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public record PostDetailResponse(String title,

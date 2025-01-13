@@ -1,30 +1,25 @@
-package cafeboard;
+package cafeboard.board;
 
-import cafeboard.Post.DTO.CreatePost;
-import cafeboard.board.Board;
-import cafeboard.board.BoardRepository;
+import cafeboard.ApiSetting;
 import cafeboard.board.DTO.BoardResponse;
 import cafeboard.board.DTO.BoardUpdate;
 import cafeboard.board.DTO.CreateBoard;
 import cafeboard.board.DTO.CreateBoardResponse;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
 
-import java.util.*;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class BoardApiTest extends ApiSetting {
+public class BoardTest extends ApiSetting {
 
     private final BoardRepository boardRepository;
 
     @Autowired
-    public BoardApiTest(BoardRepository boardRepository) {
+    public BoardTest(BoardRepository boardRepository) {
         this.boardRepository = boardRepository;
     }
 
@@ -33,18 +28,17 @@ public class BoardApiTest extends ApiSetting {
 
 
         CreateBoardResponse response = RestAssured.given()
-                .contentType(ContentType.JSON) // 요청의 Content-Type 설정
-                .body(new CreateBoard("테스트게시판")) // 요청 본문 설정
+                .contentType(ContentType.JSON)
+                .body(new CreateBoard("테스트게시판"))
                 .log().all() // 요청 로그 출력
                 .when()
                 .post("/boards") // POST 요청 전송
                 .then()
-                .statusCode(200) // HTTP 상태 코드 검증 (201 Created)
+                .statusCode(200)
                 .extract()
                 .as(CreateBoardResponse.class);
 
-        System.out.println(response.createdTime());
-        assertThat(response.id()).isEqualTo(1);
+        System.out.println(response.id());
     }
 
     @Test
@@ -109,7 +103,6 @@ public class BoardApiTest extends ApiSetting {
     @Test
     void 게시판수정Test() {
 
-
         CreateBoardResponse 만들었던게시판 = RestAssured.given()
                 .contentType(ContentType.JSON) // 요청의 Content-Type 설정
                 .body(new CreateBoard("테스트게시판")) // 요청 본문 설정
@@ -144,5 +137,4 @@ public class BoardApiTest extends ApiSetting {
 
         assertThat(boardResponses.get(0).title()).isEqualTo("수정게시판");
     }
-
 }

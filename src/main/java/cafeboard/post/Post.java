@@ -1,4 +1,4 @@
-package cafeboard.Post;
+package cafeboard.post;
 
 import cafeboard.board.Board;
 import jakarta.persistence.*;

@@ -1,9 +1,10 @@
-package cafeboard.Post;
+package cafeboard.post;
 
-import cafeboard.Post.DTO.CreatePost;
-import cafeboard.Post.DTO.PostDetailResponse;
-import cafeboard.Post.DTO.PostResponse;
-import cafeboard.Post.DTO.PostUpdate;
+
+import cafeboard.post.DTO.CreatePost;
+import cafeboard.post.DTO.PostDetailResponse;
+import cafeboard.post.DTO.PostResponse;
+import cafeboard.post.DTO.PostUpdate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

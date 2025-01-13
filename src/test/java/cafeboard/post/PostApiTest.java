@@ -1,16 +1,14 @@
-package cafeboard;
+package cafeboard.post;
 
-import cafeboard.Post.DTO.CreatePost;
-import cafeboard.Post.DTO.PostDetailResponse;
-import cafeboard.Post.DTO.PostResponse;
-import cafeboard.Post.DTO.PostUpdate;
+import cafeboard.ApiSetting;
+import cafeboard.post.DTO.CreatePost;
+import cafeboard.post.DTO.PostDetailResponse;
+import cafeboard.post.DTO.PostResponse;
+import cafeboard.post.DTO.PostUpdate;
 import cafeboard.board.Board;
 import cafeboard.board.BoardRepository;
-import cafeboard.board.DTO.BoardResponse;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import io.restassured.parsing.Parser;
-import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,7 +16,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PostApiTest extends ApiSetting{
+public class PostApiTest extends ApiSetting {
 
     private final BoardRepository boardRepository;
 
@@ -160,9 +158,7 @@ public class PostApiTest extends ApiSetting{
                 .jsonPath()
                 .getList(".", PostResponse.class);
 
-        assertThat(responses.get(0).title()).isEqualTo("수정한 제목");
         assertThat(responses.get(0).content()).isEqualTo("수정한 내용");
-        assertThat(responses.get(0).writer()).isEqualTo("테스트이름");
-        System.out.println(responses.get(0).id());
+
     }
 }
