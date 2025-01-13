@@ -19,22 +19,13 @@ import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ApiTest {
+public class BoardApiTest extends ApiSetting {
 
     private final BoardRepository boardRepository;
 
-    @LocalServerPort
-    int port;
-
     @Autowired
-    public ApiTest(BoardRepository boardRepository) {
+    public BoardApiTest(BoardRepository boardRepository) {
         this.boardRepository = boardRepository;
-    }
-
-    @BeforeEach
-    void setUp() {
-        RestAssured.port = port;
     }
 
     @Test
