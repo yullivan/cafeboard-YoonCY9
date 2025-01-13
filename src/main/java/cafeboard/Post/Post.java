@@ -23,6 +23,7 @@ public class Post {
     private String writer;
 
     @ManyToOne
+    @JoinColumn(nullable = false)
     private Board board;
 
     @CreatedDate

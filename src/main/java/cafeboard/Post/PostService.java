@@ -2,10 +2,12 @@ package cafeboard.Post;
 
 import cafeboard.Post.DTO.CreatePost;
 import cafeboard.Post.DTO.PostDetailResponse;
+import cafeboard.Post.DTO.PostResponse;
 import cafeboard.board.Board;
 import cafeboard.board.BoardRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -33,6 +35,17 @@ public class PostService {
                 post.getWriter(),
                 post.getCreatedTime(),
                 post.getId());
+    }
+
+    public List<PostResponse> findAll() {  // 모든 게시글 조회
+        List<Post> posts = postRepository.findAll();
+        return posts.stream()
+                .map(p -> new PostResponse(
+                        p.getTitle(),
+                        p.getContent(),
+                        p.getWriter(),
+                        p.getId()
+                )).toList();
     }
 
     public void delete(Long postId) {
