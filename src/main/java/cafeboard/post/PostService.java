@@ -1,9 +1,9 @@
 package cafeboard.post;
 
-import cafeboard.post.DTO.CreatePost;
-import cafeboard.post.DTO.PostDetailedResponse;
-import cafeboard.post.DTO.PostResponse;
-import cafeboard.post.DTO.PostUpdate;
+import cafeboard.comment.Comment;
+import cafeboard.comment.CommentRepository;
+import cafeboard.comment.DTO.CommentResponse;
+import cafeboard.post.DTO.*;
 import cafeboard.board.Board;
 import cafeboard.board.BoardRepository;
 import org.springframework.stereotype.Service;
@@ -19,9 +19,12 @@ public class PostService {
 
     private final BoardRepository boardRepository;
 
-    public PostService(PostRepository postRepository, BoardRepository boardRepository) {
+    private final CommentRepository commentRepository;
+
+    public PostService(PostRepository postRepository, BoardRepository boardRepository, CommentRepository commentRepository) {
         this.postRepository = postRepository;
         this.boardRepository = boardRepository;
+        this.commentRepository = commentRepository;
     }
 
     public PostDetailedResponse create(CreatePost dto) {
@@ -50,6 +53,25 @@ public class PostService {
                         p.getId(),
                         p.commentCount()
                 )).toList();
+    }
+
+    public PostInComment findByPostId(Long postId) {
+        List<Comment> comments = commentRepository.findByPostId(postId);  // 게시판 id 로 comment 리스트를 담는 쿼리메서드
+        List<CommentResponse> commentResponses =
+                comments.stream().map(c -> new CommentResponse(
+                        c.getId(),
+                        c.getWriter(),
+                        c.getContent())).toList();
+
+        Post post = postRepository.findById(postId).orElseThrow(
+                () -> new NoSuchElementException("존재하지 않는 post id" + postId));
+
+        return new PostInComment(
+                post.getId(),
+                post.getTitle(),
+                post.getContent(),
+                post.getWriter(),
+                commentResponses);
     }
 
     @Transactional

@@ -1,10 +1,7 @@
 package cafeboard.post;
 
 
-import cafeboard.post.DTO.CreatePost;
-import cafeboard.post.DTO.PostDetailedResponse;
-import cafeboard.post.DTO.PostResponse;
-import cafeboard.post.DTO.PostUpdate;
+import cafeboard.post.DTO.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,9 +20,14 @@ public class PostRestController {
         return postService.create(post);
     }
 
-    @GetMapping("/posts")
+    @GetMapping("/posts") // 댓글 개수포함 게시판 전체조회
     public List<PostResponse> findAll() { // 모든 게시글 조회 (나중에 댓글 개수 추가해야함)
         return postService.findAll();
+    }
+
+    @GetMapping("/posts/{postId}") // 댓글목록 포함 게시판 상세조회
+    public PostInComment findByPostId (@PathVariable Long postId) {
+        return postService.findByPostId(postId);
     }
 
     @PutMapping("/posts/{postId}")

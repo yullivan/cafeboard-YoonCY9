@@ -75,6 +75,10 @@ public class Post {
         return updatedTime;
     }
 
+    public List<Comment> getComments() {
+        return comments;
+    }
+
     public int commentCount() {
         return this.comments.size();
     }
