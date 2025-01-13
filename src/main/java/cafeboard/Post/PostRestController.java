@@ -1,6 +1,7 @@
 package cafeboard.Post;
 
 import cafeboard.Post.DTO.CreatePost;
+import cafeboard.Post.DTO.PostDetailResponse;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +17,7 @@ public class PostRestController {
     }
 
     @PostMapping("/posts")
-    public void create(@RequestBody CreatePost post) {
-        postService.create(post);
+    public PostDetailResponse create(@RequestBody CreatePost post) {
+        return postService.create(post);
     }
 }

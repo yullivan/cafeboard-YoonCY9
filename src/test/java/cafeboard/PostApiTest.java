@@ -1,12 +1,17 @@
 package cafeboard;
 
 import cafeboard.Post.DTO.CreatePost;
+import cafeboard.Post.DTO.PostDetailResponse;
 import cafeboard.board.Board;
 import cafeboard.board.BoardRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.parsing.Parser;
+import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class PostApiTest extends ApiSetting{
 
@@ -31,12 +36,16 @@ public class PostApiTest extends ApiSetting{
                 "테스트 작성자"
         );
 
-        RestAssured.given()
+        PostDetailResponse response = RestAssured.given()
                 .contentType(ContentType.JSON)
                 .body(createPostRequest)
                 .when()
                 .post("/posts")
                 .then()
-                .statusCode(200);
+                .statusCode(200)
+                .extract()
+                .as(PostDetailResponse.class);
+
+        assertThat(response.content()).isEqualTo("테스트 내용");
     }
 }
