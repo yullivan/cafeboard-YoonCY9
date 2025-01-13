@@ -3,9 +3,11 @@ package cafeboard.Post;
 import cafeboard.Post.DTO.CreatePost;
 import cafeboard.Post.DTO.PostDetailResponse;
 import cafeboard.Post.DTO.PostResponse;
+import cafeboard.Post.DTO.PostUpdate;
 import cafeboard.board.Board;
 import cafeboard.board.BoardRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -48,6 +50,15 @@ public class PostService {
                 )).toList();
     }
 
+    @Transactional
+    public void update(Long postId, PostUpdate dto) {
+        Post post = postRepository.findById(postId).orElseThrow(
+                () -> new NoSuchElementException("게시글을 찾을수 없음"));
+
+        post.setPost(dto.title(), dto.content(), dto.writer());
+    }
+
+    @Transactional
     public void delete(Long postId) {
         postRepository.deleteById(postId);
     }

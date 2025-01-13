@@ -69,4 +69,11 @@ public class Post {
     public LocalDateTime getUpdatedTime() {
         return updatedTime;
     }
+
+    public void setPost(String title, String content, String writer) {
+        this.title = title;
+        this.content = content;
+        this.writer = writer;
+    }
+
 }
