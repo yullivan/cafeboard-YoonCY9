@@ -34,4 +34,8 @@ public class PostService {
                 post.getCreatedTime(),
                 post.getId());
     }
+
+    public void delete(Long postId) {
+        postRepository.deleteById(postId);
+    }
 }

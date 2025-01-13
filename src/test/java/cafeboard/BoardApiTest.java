@@ -145,26 +145,4 @@ public class BoardApiTest extends ApiSetting {
         assertThat(boardResponses.get(0).title()).isEqualTo("수정게시판");
     }
 
-    @Test
-    void 게시글생성Test() {
-
-        Board board = new Board("테스트게시판");
-        boardRepository.save(board);
-
-        CreatePost createPostRequest = new CreatePost(
-                board.getId(),
-                "테스트 게시글",
-                "테스트 내용",
-                "테스트 작성자"
-        );
-
-        RestAssured.given()
-                .contentType(ContentType.JSON)
-                .body(createPostRequest)
-                .when()
-                .post("/posts")
-                .then()
-                .statusCode(200);
-
-    }
 }

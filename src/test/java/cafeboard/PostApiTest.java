@@ -48,4 +48,38 @@ public class PostApiTest extends ApiSetting{
 
         assertThat(response.content()).isEqualTo("테스트 내용");
     }
+
+    @Test
+    void 게시글삭제Test() {
+
+        Board board = new Board("테스트게시판");
+        boardRepository.save(board);
+
+        CreatePost createPostRequest = new CreatePost(
+                board.getId(),
+                "테스트 게시글",
+                "테스트 내용",
+                "테스트 작성자"
+        );
+
+        PostDetailResponse response = RestAssured.given()
+                .contentType(ContentType.JSON)
+                .body(createPostRequest)
+                .when()
+                .post("/posts")
+                .then()
+                .statusCode(200)
+                .extract()
+                .as(PostDetailResponse.class);
+
+        RestAssured.given()
+                .pathParam("postId",response.id())
+                .when()
+                .delete("/posts/{postId}")
+                .then()
+                .statusCode(200);
+
+
+
+    }
 }

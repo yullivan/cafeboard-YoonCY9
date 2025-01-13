@@ -2,10 +2,7 @@ package cafeboard.Post;
 
 import cafeboard.Post.DTO.CreatePost;
 import cafeboard.Post.DTO.PostDetailResponse;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class PostRestController {
@@ -19,5 +16,10 @@ public class PostRestController {
     @PostMapping("/posts")
     public PostDetailResponse create(@RequestBody CreatePost post) {
         return postService.create(post);
+    }
+
+    @DeleteMapping("/posts/{postId}")
+    public void delete(@PathVariable Long postId) {
+        postService.delete(postId);
     }
 }

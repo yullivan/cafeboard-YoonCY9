@@ -31,6 +31,9 @@ public class Post {
     @LastModifiedDate
     private LocalDateTime updatedTime;
 
+    public Post() {
+    }
+
     public Post(String title, String content, String writer, Board board) {
         this.title = title;
         this.content = content;

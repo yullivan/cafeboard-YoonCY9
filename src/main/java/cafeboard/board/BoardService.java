@@ -36,6 +36,7 @@ public class BoardService {
         board.setTitle(dto.title());
     }
 
+    // 나중에 post를 다 삭제 후 보드를 삭제하도록 변경해야함
     @Transactional
     public void delete(Long id) { // 특정 게시판 삭제
         boardRepository.deleteById(id);
