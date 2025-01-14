@@ -22,8 +22,8 @@ public class CommentService {
     }
 
     public CommentDetailedResponse create(CreateComment dto) {
-        Post post = postRepository.findById(dto.postId()).orElseThrow(
-                () -> new NoSuchElementException("존재하지 않는 게시글 id"));
+        Post post = postRepository.findById(dto.postId()).orElseThrow(()
+                -> new NoSuchElementException("존재하지 않는 게시글 id"));
 
         Comment comment = new Comment(dto.writer(), dto.content(), post);
         commentRepository.save(comment);
@@ -36,8 +36,8 @@ public class CommentService {
 
     @Transactional
     public void update(Long commentId, CommentUpdate dto) {
-        Comment comment = commentRepository.findById(commentId).orElseThrow(
-                () -> new NoSuchElementException("존재하지 않는 댓글 id" + commentId));
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() ->
+                new NoSuchElementException("존재하지 않는 댓글 id" + commentId));
 
         comment.setComment(dto.writer(), dto.content());
     }

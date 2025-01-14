@@ -63,8 +63,8 @@ public class PostService {
                         c.getWriter(),
                         c.getContent())).toList();
 
-        Post post = postRepository.findById(postId).orElseThrow(
-                () -> new NoSuchElementException("존재하지 않는 post id" + postId));
+        Post post = postRepository.findById(postId).orElseThrow(()
+                -> new NoSuchElementException("존재하지 않는 post id" + postId));
 
         return new PostInComment(
                 post.getId(),
@@ -84,8 +84,8 @@ public class PostService {
 
     @Transactional
     public void update(Long postId, PostUpdate dto) {
-        Post post = postRepository.findById(postId).orElseThrow(
-                () -> new NoSuchElementException("게시글을 찾을수 없음"));
+        Post post = postRepository.findById(postId).orElseThrow(() ->
+                new NoSuchElementException("게시글을 찾을수 없음"));
 
         post.setPost(dto.title(), dto.content(), dto.writer());
     }
