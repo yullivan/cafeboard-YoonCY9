@@ -1,5 +1,6 @@
 package cafeboard.post;
 
+import cafeboard.BaseEntity;
 import cafeboard.board.Board;
 import cafeboard.comment.Comment;
 import jakarta.persistence.*;
@@ -10,9 +11,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@EntityListeners(AuditingEntityListener.class)
 @Entity
-public class Post {
+public class Post extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,11 +31,6 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
 
-    @CreatedDate
-    private LocalDateTime createdTime;
-
-    @LastModifiedDate
-    private LocalDateTime updatedTime;
 
     public Post() {
     }
@@ -68,11 +63,11 @@ public class Post {
     }
 
     public LocalDateTime getCreatedTime() {
-        return createdTime;
+        return super.getCreatedTime();
     }
 
     public LocalDateTime getUpdatedTime() {
-        return updatedTime;
+        return super.getUpdatedTime();
     }
 
     public List<Comment> getComments() {

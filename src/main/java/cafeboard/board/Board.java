@@ -1,5 +1,6 @@
 package cafeboard.board;
 
+import cafeboard.BaseEntity;
 import cafeboard.post.Post;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -9,21 +10,14 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@EntityListeners(AuditingEntityListener.class)
 @Entity
-public class Board {
+public class Board extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String title;
-
-    @CreatedDate
-    private LocalDateTime createdTime;
-
-    @LastModifiedDate
-    private LocalDateTime updatedTime;
 
     @OneToMany(mappedBy = "board")
     private List<Post> posts;
@@ -48,11 +42,11 @@ public class Board {
     }
 
     public LocalDateTime getCreatedTime() {
-        return createdTime;
+        return super.getCreatedTime();
     }
 
     public LocalDateTime getUpdatedTime() {
-        return updatedTime;
+        return super.getUpdatedTime();
     }
 
     public void setTitle(String title) {
