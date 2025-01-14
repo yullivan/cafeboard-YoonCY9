@@ -43,14 +43,14 @@
 - comments 
 
 ### 생성 Post
-- /post  
+- /posts
 - Body : boardId (Long), title (String) , content(String) , writer(String)
 
 
 ### 조회 Get
-- /post/numberofcomments  (게시글 목록 조회, 응답데이터에 게시글 id,댓글 개수 포함)
-- /post/{postId}  (상세조회,댓글 목록 포함)
-- /post/filtercomments/{postId} (특정게시글의 댓글목록 조회)
+- /posts (게시글 목록 조회, 응답데이터에 게시글 id,댓글 개수 포함)
+- /posts/{postId}  (상세조회,댓글 목록 포함)
+- /posts/comments/{postId} (특정게시글의 댓글목록 조회)
 
 ### 수정 Put
 - /posts/{postId} (해당 포스트의 내용 수정)

@@ -79,9 +79,16 @@ public class Post extends BaseEntity {
     }
 
     public void setPost(String title, String content, String writer) {
-        this.title = title;
-        this.content = content;
-        this.writer = writer;
+        if (title != null) {
+            this.title = title;
+        }
+        if (content != null) {
+            this.content = content;
+        }
+        if (writer != null) {
+            this.writer = writer;
+        }
+
     }
 
 }
