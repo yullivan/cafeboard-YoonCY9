@@ -8,6 +8,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.NoSuchElementException;
 
 @Entity
 public class Comment extends BaseEntity {
@@ -58,11 +59,15 @@ public class Comment extends BaseEntity {
     }
 
     public void setComment(String writer, String content) {
+        if (writer == null && content == null) {
+            throw new IllegalStateException("수정할 내용이 없습니다");
+        }
         if (writer != null) {
             this.writer = writer;
         }
         if (content != null) {
             this.content = content;
         }
+
     }
 }

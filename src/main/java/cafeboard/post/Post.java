@@ -79,6 +79,9 @@ public class Post extends BaseEntity {
     }
 
     public void setPost(String title, String content, String writer) {
+        if (title == null && content == null && writer == null) {
+            throw new IllegalStateException("수정할 내용이 없습니다");
+        }
         if (title != null) {
             this.title = title;
         }
@@ -88,7 +91,6 @@ public class Post extends BaseEntity {
         if (writer != null) {
             this.writer = writer;
         }
-
     }
 
 }
