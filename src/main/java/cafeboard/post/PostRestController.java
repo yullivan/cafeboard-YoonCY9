@@ -26,7 +26,7 @@ public class PostRestController {
         return postService.findAll();
     }
 
-    @GetMapping("/post/{postId}") // 특정 게시판의 댓글목록 조회
+    @GetMapping("/posts/comments/{postId}") // 특정 게시판의 댓글목록 조회
     public List<CommentResponse> findByCommetList(@PathVariable Long postId) {
         return postService.findByCommentList(postId);
     }
