@@ -84,6 +84,10 @@ public class PostService {
 
     @Transactional
     public void delete(Long postId) {
+        List<Comment> comments = commentRepository.findByPostId(postId);
+        for (Comment c : comments) {
+            commentRepository.delete(c);
+        }
         postRepository.deleteById(postId);
     }
 }
