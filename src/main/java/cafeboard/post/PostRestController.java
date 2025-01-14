@@ -17,8 +17,8 @@ public class PostRestController {
     }
 
     @PostMapping("/posts")
-    public PostDetailedResponse create(@RequestBody CreatePost post) {
-        return postService.create(post);
+    public void create(@RequestBody CreatePost post) {
+        postService.create(post);
     }
 
     @GetMapping("/posts") // 댓글 개수포함 게시판 전체조회
@@ -26,18 +26,19 @@ public class PostRestController {
         return postService.findAll();
     }
 
-    @GetMapping("/posts/comments/{postId}") // 특정 게시판의 댓글목록 조회
-    public List<CommentResponse> findByCommetList(@PathVariable Long postId) {
-        return postService.findByCommentList(postId);
+    @GetMapping("/posts/boards/{boardId}")
+    public List<PostResponse> findByBoardId(@PathVariable Long boardId) {
+        return postService.findByBoardId(boardId);
     }
 
+
     @GetMapping("/posts/{postId}") // 댓글목록 포함 게시판 상세조회
-    public PostInComment findByPostId (@PathVariable Long postId) {
+    public PostDetailedResponse findByPostId (@PathVariable Long postId) {
         return postService.findByPostId(postId);
     }
 
     @PutMapping("/posts/{postId}")
-    public void update(@PathVariable Long postId, @RequestBody PostUpdate post) {
+    public void update(@PathVariable Long postId, @RequestBody UpdatePost post) {
         postService.update(postId,post);
     }
 

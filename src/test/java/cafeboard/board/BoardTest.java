@@ -2,7 +2,7 @@ package cafeboard.board;
 
 import cafeboard.ApiSetting;
 import cafeboard.board.DTO.BoardResponse;
-import cafeboard.board.DTO.BoardUpdate;
+import cafeboard.board.DTO.UpdateBoard;
 import cafeboard.board.DTO.CreateBoard;
 import cafeboard.board.DTO.BoardDetailedResponse;
 import io.restassured.RestAssured;
@@ -38,7 +38,7 @@ public class BoardTest extends ApiSetting {
                 .extract()
                 .as(BoardDetailedResponse.class);
 
-        System.out.println(response.id());
+        assertThat(response.id()).isEqualTo(1);
     }
 
     @Test
@@ -116,7 +116,7 @@ public class BoardTest extends ApiSetting {
 
         RestAssured.given()
                 .contentType(ContentType.JSON)
-                .body(new BoardUpdate("수정게시판"))
+                .body(new UpdateBoard("수정게시판"))
                 .log().all()
                 .pathParam("boardId", 만들었던게시판.id())
                 .when()

@@ -1,13 +1,15 @@
 package cafeboard.comment;
 
 import cafeboard.comment.DTO.CommentDetailedResponse;
-import cafeboard.comment.DTO.CommentUpdate;
+import cafeboard.comment.DTO.CommentResponse;
+import cafeboard.comment.DTO.UpdateComment;
 import cafeboard.comment.DTO.CreateComment;
 import cafeboard.post.Post;
 import cafeboard.post.PostRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -34,8 +36,16 @@ public class CommentService {
                 comment.getCreatedTime());
     }
 
+    public List<CommentResponse> findByCommentList(Long postId) { // 특정 게시판의 댓글리스트 조회
+        List<Comment> comments = commentRepository.findByPostId(postId);
+        return comments.stream().map(c -> new CommentResponse(
+                c.getId(),
+                c.getWriter(),
+                c.getContent())).toList();
+    }
+
     @Transactional
-    public void update(Long commentId, CommentUpdate dto) {
+    public void update(Long commentId, UpdateComment dto) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(() ->
                 new NoSuchElementException("존재하지 않는 댓글 id" + commentId));
 

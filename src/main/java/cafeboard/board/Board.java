@@ -17,19 +17,13 @@ public class Board extends BaseEntity {
 
     private String title;
 
-    @OneToMany(mappedBy = "board")
-    private List<Post> posts;
-
-    public Board() {
+    protected Board() {
     }
 
     public Board(String title) {
         this.title = title;
     }
 
-    public List<Post> getPosts() {
-        return posts;
-    }
 
     public Long getId() {
         return id;

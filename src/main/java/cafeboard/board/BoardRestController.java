@@ -1,7 +1,7 @@
 package cafeboard.board;
 
 import cafeboard.board.DTO.BoardResponse;
-import cafeboard.board.DTO.BoardUpdate;
+import cafeboard.board.DTO.UpdateBoard;
 import cafeboard.board.DTO.CreateBoard;
 import cafeboard.board.DTO.BoardDetailedResponse;
 import cafeboard.post.DTO.PostResponse;
@@ -30,7 +30,7 @@ public class BoardRestController {
     }
 
     @PutMapping("/boards/{boardId}")
-    public void update(@PathVariable Long boardId, @RequestBody BoardUpdate board) {
+    public void update(@PathVariable Long boardId, @RequestBody UpdateBoard board) {
         boardService.update(boardId,board);
     }
 
@@ -39,8 +39,5 @@ public class BoardRestController {
         boardService.delete(boardId);
     }
 
-    @GetMapping("/boards/{boardId}") // 특정 게시판의 게시글 목록 조회
-    public List<PostResponse> findByBoardId(@PathVariable Long boardId) {
-        return boardService.findByBoardId(boardId);
-    }
+
 }

@@ -1,9 +1,12 @@
 package cafeboard.board;
 
 import cafeboard.board.DTO.BoardResponse;
-import cafeboard.board.DTO.BoardUpdate;
+import cafeboard.board.DTO.UpdateBoard;
 import cafeboard.board.DTO.CreateBoard;
 import cafeboard.board.DTO.BoardDetailedResponse;
+import cafeboard.comment.Comment;
+import cafeboard.comment.CommentRepository;
+import cafeboard.comment.CommentService;
 import cafeboard.post.DTO.PostResponse;
 import cafeboard.post.Post;
 import cafeboard.post.PostRepository;
@@ -19,9 +22,11 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final PostRepository postRepository;
 
+
     public BoardService(BoardRepository boardRepository, PostRepository postRepository) {
         this.boardRepository = boardRepository;
         this.postRepository = postRepository;
+
     }
 
     public BoardDetailedResponse create(CreateBoard dto) {  // 게시판 생성
@@ -32,22 +37,14 @@ public class BoardService {
 
     public List<BoardResponse> findAll() { // 모든 게시판 조회
         List<Board> boards = boardRepository.findAll();
-        return boards.stream().map(board -> new BoardResponse(board.getId(), board.getTitle())).toList();
-    }
-
-    public List<PostResponse> findByBoardId(Long boardId) { // 해당 게시판의 게시글 조회
-        Board board = boardRepository.findById(boardId).orElseThrow();
-        List<Post> posts = board.getPosts();
-        return posts.stream().map(p -> new PostResponse(
-                p.getTitle(),
-                p.getContent(),
-                p.getWriter(),
-                p.getId(),
-                p.commentCount())).toList();
+        return boards.stream()
+                .map(board -> new
+                        BoardResponse(board.getId(), board.getTitle()))
+                .toList();
     }
 
     @Transactional
-    public void update(Long id, BoardUpdate dto) {
+    public void update(Long id, UpdateBoard dto) {
         Board board = boardRepository.findById(id).orElseThrow(() ->
                 new NoSuchElementException("게시판을 찾을 수 없음"));
         board.setTitle(dto.title());

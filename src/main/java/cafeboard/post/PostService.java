@@ -27,19 +27,13 @@ public class PostService {
         this.commentRepository = commentRepository;
     }
 
-    public PostDetailedResponse create(CreatePost dto) {
+    public void create(CreatePost dto) {
         Board board = boardRepository
                 .findById(dto.boardId()).orElseThrow
                         (() -> new NoSuchElementException("존재하지 않는 보드 id" + dto.boardId()));
 
         Post post = new Post(dto.title(), dto.content(), dto.writer(), board);
         postRepository.save(post);
-        return new PostDetailedResponse(
-                post.getTitle(),
-                post.getContent(),
-                post.getWriter(),
-                post.getCreatedTime(),
-                post.getId());
     }
 
     public List<PostResponse> findAll() {  // 모든 게시글 조회
@@ -55,7 +49,17 @@ public class PostService {
                 )).toList();
     }
 
-    public PostInComment findByPostId(Long postId) {
+    public List<PostResponse> findByBoardId(Long boardId) { // 해당 게시판의 게시글 조회
+        List<Post> posts = postRepository.findByBoardId(boardId);
+        return posts.stream().map(p -> new PostResponse(
+                p.getTitle(),
+                p.getContent(),
+                p.getWriter(),
+                p.getId(),
+                p.commentCount())).toList();
+    }
+
+    public PostDetailedResponse findByPostId(Long postId) {
         List<Comment> comments = commentRepository.findByPostId(postId);  // 게시판 id 로 comment 리스트를 담는 쿼리메서드
         List<CommentResponse> commentResponses =
                 comments.stream().map(c -> new CommentResponse(
@@ -66,24 +70,18 @@ public class PostService {
         Post post = postRepository.findById(postId).orElseThrow(()
                 -> new NoSuchElementException("존재하지 않는 post id" + postId));
 
-        return new PostInComment(
-                post.getId(),
-                post.getTitle(),
+        return new PostDetailedResponse(post.getTitle(),
                 post.getContent(),
                 post.getWriter(),
-                commentResponses);
+                post.getCreatedTime(),
+                post.getId(),
+                commentResponses
+                );
     }
 
-    public List<CommentResponse> findByCommentList(Long postId) { // 특정 게시판의 댓글리스트 조회
-        List<Comment> comments = commentRepository.findByPostId(postId);
-        return comments.stream().map(c -> new CommentResponse(
-                c.getId(),
-                c.getWriter(),
-                c.getContent())).toList();
-    }
 
     @Transactional
-    public void update(Long postId, PostUpdate dto) {
+    public void update(Long postId, UpdatePost dto) {
         Post post = postRepository.findById(postId).orElseThrow(() ->
                 new NoSuchElementException("게시글을 찾을수 없음"));
 

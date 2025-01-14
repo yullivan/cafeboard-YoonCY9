@@ -30,7 +30,7 @@ public class Post extends BaseEntity {
     private List<Comment> comments;
 
 
-    public Post() {
+    protected Post() {
     }
 
     public Post(String title, String content, String writer, Board board) {
