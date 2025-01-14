@@ -1,6 +1,7 @@
 package cafeboard.post;
 
 
+import cafeboard.comment.DTO.CommentResponse;
 import cafeboard.post.DTO.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +24,11 @@ public class PostRestController {
     @GetMapping("/posts") // 댓글 개수포함 게시판 전체조회
     public List<PostResponse> findAll() { // 모든 게시글 조회 (나중에 댓글 개수 추가해야함)
         return postService.findAll();
+    }
+
+    @GetMapping("/post/{postId}") // 특정 게시판의 댓글목록 조회
+    public List<CommentResponse> findByCommetList(@PathVariable Long postId) {
+        return postService.findByCommentList(postId);
     }
 
     @GetMapping("/posts/{postId}") // 댓글목록 포함 게시판 상세조회

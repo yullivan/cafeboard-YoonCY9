@@ -74,6 +74,14 @@ public class PostService {
                 commentResponses);
     }
 
+    public List<CommentResponse> findByCommentList(Long postId) { // 특정 게시판의 댓글리스트 조회
+        List<Comment> comments = commentRepository.findByPostId(postId);
+        return comments.stream().map(c -> new CommentResponse(
+                c.getId(),
+                c.getWriter(),
+                c.getContent())).toList();
+    }
+
     @Transactional
     public void update(Long postId, PostUpdate dto) {
         Post post = postRepository.findById(postId).orElseThrow(
