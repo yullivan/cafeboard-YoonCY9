@@ -3,6 +3,7 @@ package cafeboard.post;
 import cafeboard.BaseEntity;
 import cafeboard.board.Board;
 import cafeboard.comment.Comment;
+import cafeboard.member.Member;
 import jakarta.persistence.*;
 
 
@@ -26,6 +27,10 @@ public class Post extends BaseEntity {
     @JoinColumn(nullable = false)
     private Board board;
 
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Member member;
+
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
 
@@ -33,11 +38,12 @@ public class Post extends BaseEntity {
     protected Post() {
     }
 
-    public Post(String title, String content, String writer, Board board) {
+    public Post(String title, String content, String writer, Board board, Member member) {
         this.title = title;
         this.content = content;
         this.writer = writer;
         this.board = board;
+        this.member = member;
     }
 
     public Long getId() {
@@ -58,6 +64,10 @@ public class Post extends BaseEntity {
 
     public Board getBoard() {
         return board;
+    }
+
+    public Member getMember() {
+        return member;
     }
 
     public LocalDateTime getCreatedTime() {

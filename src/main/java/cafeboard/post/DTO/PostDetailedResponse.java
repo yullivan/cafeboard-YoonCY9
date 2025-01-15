@@ -10,5 +10,7 @@ public record PostDetailedResponse(String title,
                                    String writer,
                                    LocalDateTime createdTime,
                                    Long id,
-                                   List<CommentResponse> comments) {
+                                   List<CommentResponse> comments,
+                                   String name,
+                                   Long memberId) {
 }

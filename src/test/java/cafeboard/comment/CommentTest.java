@@ -6,6 +6,7 @@ import cafeboard.board.DTO.BoardDetailedResponse;
 import cafeboard.comment.DTO.CommentDetailedResponse;
 import cafeboard.comment.DTO.UpdateComment;
 import cafeboard.comment.DTO.CreateComment;
+import cafeboard.member.DTO.CreateMember;
 import cafeboard.post.DTO.CreatePost;
 import cafeboard.post.DTO.PostDetailedResponse;
 import cafeboard.post.DTO.PostResponse;
@@ -34,7 +35,7 @@ public class CommentTest extends ApiSetting {
 
         RestAssured.given()
                 .contentType(ContentType.JSON)
-                .body(new CreatePost(board.id(), "테스트제목", "테스트내용", "테스트이름"))
+                .body(new CreatePost(board.id(), "테스트제목", "테스트내용", "테스트이름",1L))
                 .when()
                 .post("/posts")
                 .then()
@@ -71,7 +72,7 @@ public class CommentTest extends ApiSetting {
 
         RestAssured.given()
                 .contentType(ContentType.JSON)
-                .body(new CreatePost(board.id(), "테스트제목", "테스트내용", "테스트이름"))
+                .body(new CreatePost(board.id(), "테스트제목", "테스트내용", "테스트이름",1L))
                 .when()
                 .post("/posts")
                 .then()
@@ -121,20 +122,19 @@ public class CommentTest extends ApiSetting {
                 .extract()
                 .as(BoardDetailedResponse.class);
 
-        PostDetailedResponse post = RestAssured.given()
+        RestAssured.given()
                 .contentType(ContentType.JSON)
-                .body(new CreatePost(board.id(), "테스트제목", "테스트내용", "테스트이름"))
+                .body(new CreatePost(board.id(), "테스트제목", "테스트내용", "테스트이름",1L))
                 .when()
                 .post("/posts")
                 .then()
-                .statusCode(200)
-                .extract()
-                .as(PostDetailedResponse.class);
+                .statusCode(200);
+
 
         CommentDetailedResponse comment = RestAssured
                 .given()
                 .contentType(ContentType.JSON)
-                .body(new CreateComment(post.id(), "테스트댓글작성자", "테스트댓글내용"))
+                .body(new CreateComment(1L, "테스트댓글작성자", "테스트댓글내용"))
                 .when()
                 .post("/comments")
                 .then()

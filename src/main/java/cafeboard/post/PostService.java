@@ -3,6 +3,8 @@ package cafeboard.post;
 import cafeboard.comment.Comment;
 import cafeboard.comment.CommentRepository;
 import cafeboard.comment.DTO.CommentResponse;
+import cafeboard.member.Member;
+import cafeboard.member.MemberRepository;
 import cafeboard.post.DTO.*;
 import cafeboard.board.Board;
 import cafeboard.board.BoardRepository;
@@ -21,10 +23,13 @@ public class PostService {
 
     private final CommentRepository commentRepository;
 
-    public PostService(PostRepository postRepository, BoardRepository boardRepository, CommentRepository commentRepository) {
+    private final MemberRepository memberRepository;
+
+    public PostService(PostRepository postRepository, BoardRepository boardRepository, CommentRepository commentRepository, MemberRepository memberRepository) {
         this.postRepository = postRepository;
         this.boardRepository = boardRepository;
         this.commentRepository = commentRepository;
+        this.memberRepository = memberRepository;
     }
 
     public void create(CreatePost dto) {
@@ -32,7 +37,11 @@ public class PostService {
                 .findById(dto.boardId()).orElseThrow
                         (() -> new NoSuchElementException("존재하지 않는 보드 id" + dto.boardId()));
 
-        Post post = new Post(dto.title(), dto.content(), dto.writer(), board);
+        Member member = memberRepository
+                .findById(dto.memberId()).orElseThrow(() ->
+                new NoSuchElementException("존재하지 않는 멤버 id" + dto.memberId()));
+
+        Post post = new Post(dto.title(), dto.content(), dto.writer(), board, member);
         postRepository.save(post);
     }
 
@@ -70,12 +79,17 @@ public class PostService {
         Post post = postRepository.findById(postId).orElseThrow(()
                 -> new NoSuchElementException("존재하지 않는 post id" + postId));
 
-        return new PostDetailedResponse(post.getTitle(),
+        Member member = postRepository.findMemberByPostId(postId);
+
+        return new PostDetailedResponse(
+                post.getTitle(),
                 post.getContent(),
                 post.getWriter(),
                 post.getCreatedTime(),
                 post.getId(),
-                commentResponses
+                commentResponses,
+                member.getName(),
+                member.getId()
                 );
     }
 
