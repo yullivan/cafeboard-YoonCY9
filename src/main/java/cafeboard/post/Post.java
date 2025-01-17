@@ -21,8 +21,6 @@ public class Post extends BaseEntity {
 
     private String content;
 
-    private String writer;
-
     @ManyToOne
     @JoinColumn(nullable = false)
     private Board board;
@@ -38,10 +36,9 @@ public class Post extends BaseEntity {
     protected Post() {
     }
 
-    public Post(String title, String content, String writer, Board board, Member member) {
+    public Post(String title, String content, Board board, Member member) {
         this.title = title;
         this.content = content;
-        this.writer = writer;
         this.board = board;
         this.member = member;
     }
@@ -58,9 +55,6 @@ public class Post extends BaseEntity {
         return content;
     }
 
-    public String getWriter() {
-        return writer;
-    }
 
     public Board getBoard() {
         return board;
@@ -95,9 +89,6 @@ public class Post extends BaseEntity {
         }
         if (content != null) {
             this.content = content;
-        }
-        if (writer != null) {
-            this.writer = writer;
         }
     }
 

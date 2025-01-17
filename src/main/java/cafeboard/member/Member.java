@@ -1,6 +1,7 @@
 package cafeboard.member;
 
 import cafeboard.BaseEntity;
+import cafeboard.SecurityUtils;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -44,11 +45,22 @@ public class Member extends BaseEntity {
 
     public boolean matchPassword(String passWord) {
         int count = 0;
-        for (int i = 0; i < passWord.length(); i++) {
-            if (this.password.charAt(i) == passWord.charAt(i)) {
+        String hashInputPassword = SecurityUtils.sha256EncryptHex2(passWord);
+        for (int i = 0; i < hashInputPassword.length(); i++) {
+            if (this.password.charAt(i) == hashInputPassword.charAt(i)) {
                 count++;
             }
         }
         return count == this.password.length();
+    }
+
+    public boolean matchName(String name) {
+        int count = 0;
+        for (int i = 0; i < name.length(); i++) {
+            if (this.name.charAt(i) == name.charAt(i)) {
+                count++;
+            }
+        }
+        return count == this.name.length();
     }
 }

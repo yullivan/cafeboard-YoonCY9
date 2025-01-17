@@ -1,4 +1,8 @@
 package cafeboard.member.DTO;
 
-public record CreateMember(String name, String password) {
+import jakarta.validation.constraints.NotNull;
+
+public record CreateMember(
+        @NotNull String name,
+        @NotNull String password) {
 }

@@ -3,6 +3,7 @@ package cafeboard.post;
 import cafeboard.comment.Comment;
 import cafeboard.comment.CommentRepository;
 import cafeboard.comment.DTO.CommentResponse;
+import cafeboard.member.DTO.MemberResponse;
 import cafeboard.member.Member;
 import cafeboard.member.MemberRepository;
 import cafeboard.post.DTO.*;
@@ -41,7 +42,7 @@ public class PostService {
                 .findById(dto.memberId()).orElseThrow(() ->
                 new NoSuchElementException("존재하지 않는 멤버 id" + dto.memberId()));
 
-        Post post = new Post(dto.title(), dto.content(), dto.writer(), board, member);
+        Post post = new Post(dto.title(), dto.content(), board, member);
         postRepository.save(post);
     }
 
@@ -52,7 +53,6 @@ public class PostService {
                 .map(p -> new PostResponse(
                         p.getTitle(),
                         p.getContent(),
-                        p.getWriter(),
                         p.getId(),
                         p.commentCount()
                 )).toList();
@@ -63,7 +63,6 @@ public class PostService {
         return posts.stream().map(p -> new PostResponse(
                 p.getTitle(),
                 p.getContent(),
-                p.getWriter(),
                 p.getId(),
                 p.commentCount())).toList();
     }
@@ -81,15 +80,15 @@ public class PostService {
 
         Member member = postRepository.findMemberByPostId(postId);
 
+        MemberResponse memberResponse = new MemberResponse(member.getName());
+
         return new PostDetailedResponse(
                 post.getTitle(),
                 post.getContent(),
-                post.getWriter(),
                 post.getCreatedTime(),
                 post.getId(),
                 commentResponses,
-                member.getName(),
-                member.getId()
+                memberResponse
                 );
     }
 

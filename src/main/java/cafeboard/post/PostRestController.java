@@ -31,7 +31,6 @@ public class PostRestController {
         return postService.findByBoardId(boardId);
     }
 
-
     @GetMapping("/posts/{postId}") // 댓글목록 포함 게시판 상세조회
     public PostDetailedResponse findByPostId (@PathVariable Long postId) {
         return postService.findByPostId(postId);
