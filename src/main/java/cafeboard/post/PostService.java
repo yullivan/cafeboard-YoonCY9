@@ -33,17 +33,17 @@ public class PostService {
         this.memberRepository = memberRepository;
     }
 
-    public void create(CreatePost dto) {
+    public void create(CreatePost dto, String memberName) {
         Board board = boardRepository
                 .findById(dto.boardId()).orElseThrow
                         (() -> new NoSuchElementException("존재하지 않는 보드 id" + dto.boardId()));
 
         Member member = memberRepository
-                .findById(dto.memberId()).orElseThrow(() ->
-                new NoSuchElementException("존재하지 않는 멤버 id" + dto.memberId()));
+                .findByName(memberName);
 
         Post post = new Post(dto.title(), dto.content(), board, member);
         postRepository.save(post);
+
     }
 
     public List<PostResponse> findAll() {  // 모든 게시글 조회
@@ -72,7 +72,7 @@ public class PostService {
         List<CommentResponse> commentResponses =
                 comments.stream().map(c -> new CommentResponse(
                         c.getId(),
-                        c.getWriter(),
+                        c.getMember().getName(),
                         c.getContent())).toList();
 
         Post post = postRepository.findById(postId).orElseThrow(()

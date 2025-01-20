@@ -3,7 +3,9 @@ package cafeboard.member;
 import cafeboard.member.DTO.CreateMember;
 import cafeboard.member.DTO.DeleteMember;
 import cafeboard.member.DTO.LoginResponse;
+import cafeboard.member.DTO.LoginRequest;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,13 +25,20 @@ public class MemberRestController {
         memberService.create(member);
     }
 
+    @PostMapping("/login")
+    public LoginRequest login(@RequestBody LoginResponse response) {
+        return memberService.login(response);
+    }
+
+    @GetMapping("/me")
+    public String getProfile(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) {
+        return memberService.getMember(authorization);
+    }
+
     @DeleteMapping("/resign/{memberId}")
     public void delete(@RequestBody DeleteMember member, @PathVariable Long memberId) {
         memberService.delete(memberId, member);
     }
 
-    @PostMapping("/login")
-    public String login(@RequestBody LoginResponse response) {
-        return memberService.logIn(response);
-    }
+
 }

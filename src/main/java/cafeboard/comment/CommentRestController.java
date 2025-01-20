@@ -4,6 +4,8 @@ import cafeboard.comment.DTO.CommentDetailedResponse;
 import cafeboard.comment.DTO.CommentResponse;
 import cafeboard.comment.DTO.UpdateComment;
 import cafeboard.comment.DTO.CreateComment;
+import cafeboard.member.MemberService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,14 +14,18 @@ import java.util.List;
 public class CommentRestController {
 
     private final CommentService commentService;
+    private final MemberService memberService;
 
-    public CommentRestController(CommentService commentService) {
+    public CommentRestController(CommentService commentService, MemberService memberService) {
         this.commentService = commentService;
+        this.memberService = memberService;
     }
 
     @PostMapping("/comments")
-    public CommentDetailedResponse create(@RequestBody CreateComment comment) {
-        return commentService.create(comment);
+    public CommentDetailedResponse create(@RequestBody CreateComment comment,
+                                          @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) {
+        String memberName = memberService.getMember(authorization);
+        return commentService.create(comment, memberName);
     }
 
     @GetMapping("/comments/posts/{postId}") // 특정 게시판의 댓글목록 조회

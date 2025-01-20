@@ -4,6 +4,9 @@ import cafeboard.comment.DTO.CommentDetailedResponse;
 import cafeboard.comment.DTO.CommentResponse;
 import cafeboard.comment.DTO.UpdateComment;
 import cafeboard.comment.DTO.CreateComment;
+import cafeboard.member.Member;
+import cafeboard.member.MemberRepository;
+import cafeboard.member.MemberService;
 import cafeboard.post.Post;
 import cafeboard.post.PostRepository;
 import jakarta.transaction.Transactional;
@@ -17,21 +20,25 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
+    private final MemberRepository memberRepository;
 
-    public CommentService(CommentRepository commentRepository, PostRepository postRepository) {
+    public CommentService(CommentRepository commentRepository, PostRepository postRepository, MemberRepository memberRepository) {
         this.commentRepository = commentRepository;
         this.postRepository = postRepository;
+        this.memberRepository = memberRepository;
     }
 
-    public CommentDetailedResponse create(CreateComment dto) {
+    public CommentDetailedResponse create(CreateComment dto, String memberName) {
         Post post = postRepository.findById(dto.postId()).orElseThrow(()
                 -> new NoSuchElementException("존재하지 않는 게시글 id"));
 
-        Comment comment = new Comment(dto.writer(), dto.content(), post);
+        Member member = memberRepository.findByName(memberName);
+
+        Comment comment = new Comment(member, dto.content(), post);
         commentRepository.save(comment);
         return new CommentDetailedResponse(
                 comment.getId(),
-                comment.getWriter(),
+                member.getName(),
                 comment.getContent(),
                 comment.getCreatedTime());
     }
@@ -40,7 +47,7 @@ public class CommentService {
         List<Comment> comments = commentRepository.findByPostId(postId);
         return comments.stream().map(c -> new CommentResponse(
                 c.getId(),
-                c.getWriter(),
+                c.getMember().getName(),
                 c.getContent())).toList();
     }
 

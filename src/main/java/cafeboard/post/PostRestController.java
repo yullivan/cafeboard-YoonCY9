@@ -2,7 +2,10 @@ package cafeboard.post;
 
 
 import cafeboard.comment.DTO.CommentResponse;
+import cafeboard.member.JwtProvider;
+import cafeboard.member.MemberService;
 import cafeboard.post.DTO.*;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,13 +15,18 @@ public class PostRestController {
 
     private final PostService postService;
 
-    public PostRestController(PostService postService) {
+    private final MemberService memberService;
+
+    public PostRestController(PostService postService, MemberService memberService) {
         this.postService = postService;
+        this.memberService = memberService;
     }
 
     @PostMapping("/posts")
-    public void create(@RequestBody CreatePost post) {
-        postService.create(post);
+    public void create(@RequestBody CreatePost post,
+                       @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) {
+        String memberName = memberService.getMember(authorization);
+        postService.create(post, memberName);
     }
 
     @GetMapping("/posts") // 댓글 개수포함 게시판 전체조회

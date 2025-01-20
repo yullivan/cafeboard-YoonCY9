@@ -1,10 +1,7 @@
 package cafeboard.member;
 
 import cafeboard.SecurityUtils;
-import cafeboard.member.DTO.CreateMember;
-import cafeboard.member.DTO.DeleteMember;
-import cafeboard.member.DTO.LoginResponse;
-import cafeboard.member.DTO.MemberResponse;
+import cafeboard.member.DTO.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,11 +24,33 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    public String logIn(LoginResponse response) {
+    public LoginRequest login(LoginResponse response) {
         Member member = memberRepository.findByName(response.name());
+        if (member == null) { // 아이디가 다를 경우 member를 찾지 못해 비어있으면 오류메세지 출력
+            throw new IllegalStateException("아이디 및 비밀번호가 일치하지 않습니다");
+        }
         if (member.matchPassword(response.password())) {
-            return jwtProvider.createToken(response.name());
+            return new LoginRequest(jwtProvider.createToken(response.name()));
         } else throw new IllegalStateException("아이디 및 비밀번호가 일치하지 않습니다");
+    }
+
+    public String getMember(String authorization) {
+        String[] tokenFormat = authorization.split(" ");
+
+        String tokenType = tokenFormat[0];
+        String token = tokenFormat[1];
+
+        // Bearer 토큰인지 검증
+        if (!tokenType.equals("Bearer")) {
+            throw new IllegalArgumentException("로그인 정보가 유효하지 않습니다");
+        }
+
+        // 유효한 JWT 토큰인지 검증
+        if (!jwtProvider.isValidToken(token)) {
+            throw new IllegalArgumentException("로그인 정보가 유효하지 않습니다");
+        }
+
+        return jwtProvider.getSubject(token);
     }
 
     @Transactional

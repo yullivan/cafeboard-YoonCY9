@@ -1,6 +1,7 @@
 package cafeboard.comment;
 
 import cafeboard.BaseEntity;
+import cafeboard.member.Member;
 import cafeboard.post.Post;
 import jakarta.persistence.*;
 
@@ -15,7 +16,9 @@ public class Comment extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String writer;
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Member member;
 
     private String content;
 
@@ -26,14 +29,14 @@ public class Comment extends BaseEntity {
     protected Comment() {
     }
 
-    public Comment(String writer, String content, Post post) {
-        this.writer = writer;
+    public Comment(Member member, String content, Post post) {
+        this.member = member;
         this.content = content;
         this.post = post;
     }
 
-    public String getWriter() {
-        return writer;
+    public Member getMember() {
+        return member;
     }
 
     public String getContent() {
@@ -59,9 +62,6 @@ public class Comment extends BaseEntity {
     public void setComment(String writer, String content) {
         if (writer == null && content == null) {
             throw new IllegalStateException("수정할 내용이 없습니다");
-        }
-        if (writer != null) {
-            this.writer = writer;
         }
         if (content != null) {
             this.content = content;
