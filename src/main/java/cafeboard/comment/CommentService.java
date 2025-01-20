@@ -60,8 +60,14 @@ public class CommentService {
     }
 
     @Transactional
-    public void delete(Long commentId) {
-        commentRepository.deleteById(commentId);
+    public void delete(Long commentId, String memberName) {
+        Member member = memberRepository.findByName(memberName);
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() ->
+                new NoSuchElementException("존재하지 않는 commentId" + commentId));
+        if (comment.getMember().getName().equals(member.getName())) {
+            commentRepository.deleteById(commentId);
+        }
+
     }
 
 }

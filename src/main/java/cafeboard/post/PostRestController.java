@@ -50,7 +50,9 @@ public class PostRestController {
     }
 
     @DeleteMapping("/posts/{postId}")
-    public void delete(@PathVariable Long postId) {
-        postService.delete(postId);
+    public void delete(@PathVariable Long postId,
+                       @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) {
+        String memberName = memberService.getMember(authorization);
+        postService.delete(postId, memberName);
     }
 }

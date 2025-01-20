@@ -102,11 +102,12 @@ public class PostService {
     }
 
     @Transactional
-    public void delete(Long postId) {
-        List<Comment> comments = commentRepository.findByPostId(postId);
-        for (Comment c : comments) {
-            commentRepository.delete(c);
+    public void delete(Long postId, String memberName) {
+        Member member = memberRepository.findByName(memberName); // 멤버 찾기
+        Post post = postRepository.findById(postId).orElseThrow(() // 포스트찾기
+                -> new NoSuchElementException("존재하지 않는 post id" + postId));
+        if (post.getMember().getName().equals(member.getName())) { // 멤버이름과 포스트의 멤버이름과 같으면 지우기
+            postRepository.deleteById(postId);
         }
-        postRepository.deleteById(postId);
     }
 }

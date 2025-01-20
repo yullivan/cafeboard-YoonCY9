@@ -39,8 +39,10 @@ public class CommentRestController {
     }
 
     @DeleteMapping("/comments/{commentId}")
-    public void delete(@PathVariable Long commentId) {
-        commentService.delete(commentId);
+    public void delete(@PathVariable Long commentId,
+                       @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) {
+        String memberName = memberService.getMember(authorization);
+        commentService.delete(commentId, memberName);
     }
 
 }
