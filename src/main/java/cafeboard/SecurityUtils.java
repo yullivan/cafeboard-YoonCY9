@@ -3,7 +3,7 @@ package cafeboard;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HexFormat;
-
+// 비밀번호 해쉬화용
 public class SecurityUtils {
 
     private static final MessageDigest SHA256;

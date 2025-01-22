@@ -11,26 +11,47 @@ import cafeboard.post.DTO.PostResponse;
 import cafeboard.post.DTO.UpdatePost;
 import cafeboard.board.Board;
 import cafeboard.board.BoardRepository;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hibernate.query.results.Builders.fetch;
 
 public class PostApiTest extends ApiSetting {
 
     private final BoardRepository boardRepository;
+    private final JPAQueryFactory jpaQueryFactory;
 
     @Autowired
-    public PostApiTest(BoardRepository boardRepository) {
+    public PostApiTest(BoardRepository boardRepository, JPAQueryFactory jpaQueryFactory) {
         this.boardRepository = boardRepository;
+        this.jpaQueryFactory = jpaQueryFactory;
     }
 
-
 //    @Test
+//    void 게시글7일이내조회() {
+//
+//
+//        LocalDateTime days7 = LocalDateTime.now().minusDays(7);
+//        LocalDateTime now = LocalDateTime.now();
+//
+//
+//
+//        jpaQueryFactory.selectFrom(post)
+//                .where(
+//                        post.createdTime.goe(days7)
+//                                .and(post.createdTime.lt(now))
+//                )
+//                .fetch();
+//    }
+
+    //    @Test
 //    void 게시글생성Test() {
 //
 //        Board board = new Board("테스트게시판");
